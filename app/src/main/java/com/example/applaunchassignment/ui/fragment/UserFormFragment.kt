@@ -1,60 +1,76 @@
 package com.example.applaunchassignment.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.applaunchassignment.R
+import com.example.applaunchassignment.data.Response
+import com.example.applaunchassignment.data.model.User
+import com.example.applaunchassignment.databinding.FragmentUserFormBinding
+import com.example.applaunchassignment.ui.viewmodel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [UserFormFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class UserFormFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentUserFormBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: UserViewModel by viewModels()
+
+    private lateinit var user: User
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_form, container, false)
+        _binding = FragmentUserFormBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment UserFormFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UserFormFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.saveButton.setOnClickListener {
+            val email = binding.emailTextField.editText?.text.toString()
+            val firstName = binding.firstnameTextField.editText?.text.toString()
+            val lastName = binding.lastnameTextField.editText?.text.toString()
+            user = User(firstName, lastName, email)
+            viewModel.getUserByEmail(user.email)
+            viewModel.userByEmail.observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    is Response.Success -> {
+                        if (it.data!!.isNotEmpty()) {
+                            binding.emailTextField.error = "User with email $email already exist"
+                        } else {
+                            saveUserData()
+                        }
+                    }
                 }
-            }
+            })
+        }
+        binding.cancelButton.setOnClickListener {
+            navigateToUserList()
+        }
     }
+
+    private fun navigateToUserList() {
+        findNavController().navigate(R.id.action_userFormFragment_to_userListFragment)
+    }
+
+    private fun saveUserData() {
+        viewModel.addUser(user)
+        navigateToUserList()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

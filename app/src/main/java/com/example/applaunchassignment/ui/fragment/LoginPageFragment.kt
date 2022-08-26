@@ -1,17 +1,20 @@
 package com.example.applaunchassignment.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.applaunchassignment.Constants
 import com.example.applaunchassignment.R
 import com.example.applaunchassignment.data.model.Admin
 import com.example.applaunchassignment.databinding.FragmentLoginPageBinding
+import com.example.applaunchassignment.utils.Constants
 import com.example.applaunchassignment.utils.Utils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginPageFragment : Fragment() {
 
     private var _binding : FragmentLoginPageBinding? = null
@@ -41,12 +44,13 @@ class LoginPageFragment : Fragment() {
     }
 
     private fun handleLoginClick() {
-        val userName = binding.usernameTextField.editText?.text.toString()
-        val password = binding.passwordTextField.editText?.text.toString()
         binding.clickToLoginPage.setOnClickListener {
+            val userName = binding.usernameTextField.editText?.text.toString()
+            val password = binding.passwordTextField.editText?.text.toString()
             binding.usernameTextField.error = ""
             binding.passwordTextField.error = ""
             if (userName != Constants.USERNAME || password != Constants.PASSWORD) {
+                Log.d("MyTag", "UserName $userName & Password $password")
                 if (userName != Constants.USERNAME) {
                     binding.usernameTextField.error = "Please Enter Valid Username"
                 }

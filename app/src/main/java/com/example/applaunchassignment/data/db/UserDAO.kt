@@ -12,6 +12,9 @@ interface UserDAO {
     @Query("SELECT * FROM User")
     suspend fun getUserEntity(): List<User>
 
+    @Query("SELECT * FROM User WHERE email LIKE :email")
+    suspend fun getUserByEmail(email: String) : List<User>
+
     @Delete
     suspend fun delete(user: User)
 }

@@ -43,7 +43,12 @@
         android:id="@+id/userFormFragment"
         android:name="com.example.applaunchassignment.ui.fragment.UserFormFragment"
         android:label="fragment_user_form"
-        tools:layout="@layout/fragment_user_form" />
+        tools:layout="@layout/fragment_user_form" >
+        <action
+            android:id="@+id/action_userFormFragment_to_userListFragment"
+            app:destination="@id/userListFragment"
+            app:popUpTo="@id/userListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/weatherScreenFragment"
         android:name="com.example.applaunchassignment.ui.fragment.WeatherScreenFragment"

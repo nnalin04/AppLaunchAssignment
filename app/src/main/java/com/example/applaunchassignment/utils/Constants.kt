@@ -1,4 +1,4 @@
-package com.example.applaunchassignment
+package com.example.applaunchassignment.utils
 
 object Constants {
     const val USER_NAME_KEY = "key_user_name"

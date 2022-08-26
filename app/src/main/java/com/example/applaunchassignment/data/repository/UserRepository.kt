@@ -16,6 +16,10 @@ class UserRepository @Inject constructor(
     val userLiveData: LiveData<Response<List<User>>>
         get() = _userLiveData
 
+    private val _userByEmail = MutableLiveData<Response<List<User>>>()
+    val userByEmail: LiveData<Response<List<User>>>
+        get() = _userByEmail
+
     suspend fun getUserData() {
         try {
             _userLiveData.postValue(Response.Loading())
@@ -25,6 +29,30 @@ class UserRepository @Inject constructor(
             Log.d("MyTag", e.printStackTrace().toString())
             _userLiveData.postValue(Response.Error("Some Error Occurred"))
         }
+    }
+
+    suspend fun deleteUser(user: User) {
+        try {
+            userDB.getUserDAO().delete(user)
+            getUserData()
+        } catch (e: Exception) {
+            Log.d("MyTag", e.printStackTrace().toString())
+            _userLiveData.postValue(Response.Error("Some Error Occurred"))
+        }
+    }
+
+    suspend fun insertUser(user: User) {
+        try {
+            userDB.getUserDAO().insertUserEntity(user)
+            getUserData()
+        } catch (e: Exception) {
+            Log.d("MyTag", e.printStackTrace().toString())
+            _userLiveData.postValue(Response.Error("Some Error Occurred"))
+        }
+    }
+
+     suspend fun getUserByEmail(email: String) {
+        _userByEmail.postValue(Response.Success(userDB.getUserDAO().getUserByEmail(email)))
     }
 
 }

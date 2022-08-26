@@ -2,7 +2,6 @@ package com.example.applaunchassignment.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.applaunchassignment.Constants
 import com.example.applaunchassignment.data.model.Admin
 
 class Utils {
