@@ -1,6 +1,7 @@
 package com.example.applaunchassignment.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +48,9 @@ class UserFormFragment : Fragment() {
                     is Response.Success -> {
                         if (it.data!!.isNotEmpty()) {
                             binding.emailTextField.error = "User with email $email already exist"
+                            Log.d("MyTag", findNavController().currentDestination.toString())
                         } else {
+                            Log.d("MyTag", findNavController().currentDestination.toString())
                             saveUserData()
                         }
                     }
@@ -55,17 +58,13 @@ class UserFormFragment : Fragment() {
             })
         }
         binding.cancelButton.setOnClickListener {
-            navigateToUserList()
+            findNavController().navigate(R.id.action_userFormFragment_to_userListFragment)
         }
-    }
-
-    private fun navigateToUserList() {
-        findNavController().navigate(R.id.action_userFormFragment_to_userListFragment)
     }
 
     private fun saveUserData() {
         viewModel.addUser(user)
-        navigateToUserList()
+        findNavController().navigate(R.id.action_userFormFragment_to_userListFragment)
     }
 
     override fun onDestroyView() {

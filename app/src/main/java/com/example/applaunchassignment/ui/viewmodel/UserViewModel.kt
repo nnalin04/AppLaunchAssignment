@@ -17,6 +17,8 @@ class UserViewModel @Inject constructor(
 
     val userByEmail = repository.userByEmail
 
+    val weatherReport = repository.weatherLiveData
+
     init {
         loadUserData()
     }
@@ -42,6 +44,12 @@ class UserViewModel @Inject constructor(
     fun loadUserData() {
         viewModelScope.launch {
             repository.getUserData()
+        }
+    }
+
+    fun loadWeatherReport() {
+        viewModelScope.launch {
+            repository.getWeatherData()
         }
     }
 }

@@ -46,8 +46,7 @@
         tools:layout="@layout/fragment_user_form" >
         <action
             android:id="@+id/action_userFormFragment_to_userListFragment"
-            app:destination="@id/userListFragment"
-            app:popUpTo="@id/userListFragment" />
+            app:destination="@id/userListFragment" />
     </fragment>
     <fragment
         android:id="@+id/weatherScreenFragment"
