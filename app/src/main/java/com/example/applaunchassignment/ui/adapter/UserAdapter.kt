@@ -7,9 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.applaunchassignment.R
 import com.example.applaunchassignment.data.model.User
 import com.example.applaunchassignment.databinding.UserViewBinding
+import com.example.applaunchassignment.ui.RecyclerViewClickListener
 
 class UserAdapter constructor(
-    var data : List<User>
+    var data : List<User>,
+    var listener : RecyclerViewClickListener
 ) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserAdapter.UserViewHolder {
@@ -28,6 +30,9 @@ class UserAdapter constructor(
             with(data[position]) {
                 userViewBinding.name.text = this.firstName + " " + this.lastName
                 userViewBinding.email.text = this.email
+                userViewBinding.itemCard.setOnClickListener{
+                    listener.onRecyclerViewItemClick(it)
+                }
             }
         }
     }

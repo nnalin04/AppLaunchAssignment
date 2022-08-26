@@ -15,12 +15,13 @@ import com.example.applaunchassignment.R
 import com.example.applaunchassignment.data.Response
 import com.example.applaunchassignment.data.model.User
 import com.example.applaunchassignment.databinding.FragmentUserListBinding
+import com.example.applaunchassignment.ui.RecyclerViewClickListener
 import com.example.applaunchassignment.ui.adapter.UserAdapter
 import com.example.applaunchassignment.ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UserListFragment : Fragment() {
+class UserListFragment : Fragment(), RecyclerViewClickListener {
 
     private var _binding: FragmentUserListBinding? = null
     private val binding get() = _binding!!
@@ -75,7 +76,7 @@ class UserListFragment : Fragment() {
     private fun setRecycleView() {
         val layoutManager: RecyclerView.LayoutManager =
             LinearLayoutManager(requireActivity().applicationContext)
-        adapter = UserAdapter(data)
+        adapter = UserAdapter(data,this)
         binding.userRecycleView.layoutManager = layoutManager
         binding.userRecycleView.adapter = adapter
     }
@@ -102,6 +103,10 @@ class UserListFragment : Fragment() {
 
     private fun deleteUser(user: User) {
         viewModel.deleteUser(user)
+    }
+
+    override fun onRecyclerViewItemClick(view: View) {
+        findNavController().navigate(R.id.action_userListFragment_to_weatherScreenFragment)
     }
 
 }
